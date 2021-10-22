@@ -1,0 +1,21 @@
+{
+	"name": "parcel-transformer-lezer",
+	"version": "0.1.0",
+	"license": "MIT",
+	"main": "index.js",
+	"publishConfig": {
+		"access": "public"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/mischnic/parcel-transformer-lezer.git"
+	},
+	"dependencies": {
+		"@lezer/generator": "^0.15.2",
+		"@parcel/plugin": "^2.0.0"
+	},
+	"engines": {
+		"node": ">=12",
+		"parcel": "^2.0.0"
+	}
+}
