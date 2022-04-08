@@ -12,6 +12,7 @@
 	},
 	"dependencies": {
 		"@lezer/generator": "^0.15.2",
+		"@parcel/diagnostic": "^2.0.0",
 		"@parcel/plugin": "^2.0.0"
 	},
 	"engines": {

@@ -1,13 +1,42 @@
 const { Transformer } = require("@parcel/plugin");
+const { default: ThrowableDiagnostic } = require("@parcel/diagnostic");
 
 const lezer = require("@lezer/generator");
 
 module.exports = new Transformer({
 	async transform({ asset, logger }) {
-		const { parser, terms } = lezer.buildParserFile(await asset.getCode(), {
-			moduleStyle: "es",
-			warn: (message) => logger.warn(message),
-		});
+		let parser, terms;
+		try {
+			({ parser, terms } = lezer.buildParserFile(await asset.getCode(), {
+				moduleStyle: "es",
+				warn: (message) => logger.warn(message),
+			}));
+		} catch (e) {
+			let match = e.message.match(/(.*)\((\d)+:(\d)+\)$/);
+			if (match) {
+				let [, msg, line, col] = match;
+				let pos = {
+					line: Number(line),
+					column: Number(col) + 1,
+				};
+				throw new ThrowableDiagnostic({
+					diagnostic: {
+						message: msg,
+						codeFrames: [
+							{
+								filePath: asset.filePath,
+								codeHighlights: [
+									{
+										start: pos,
+										end: pos,
+									},
+								],
+							},
+						],
+					},
+				});
+			} else throw e;
+		}
 
 		asset.type = "js";
 		asset.setCode(`
