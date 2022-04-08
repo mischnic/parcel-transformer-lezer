@@ -9,33 +9,20 @@ module.exports = new Transformer({
 		try {
 			({ parser, terms } = lezer.buildParserFile(await asset.getCode(), {
 				moduleStyle: "es",
-				warn: (message) => logger.warn(message),
+				warn: (message) => {
+					let diagnostic = parseError(asset.filePath, message);
+					logger.warn(diagnostic || { message });
+				},
 			}));
 		} catch (e) {
-			let match = e.message.match(/(.*)\((\d)+:(\d)+\)$/s);
-			if (match) {
-				let [, msg, line, col] = match;
-				let pos = {
-					line: Number(line),
-					column: Number(col) + 1,
-				};
+			let diagnostic = parseError(asset.filePath, e.message);
+			if (diagnostic) {
 				throw new ThrowableDiagnostic({
-					diagnostic: {
-						message: msg,
-						codeFrames: [
-							{
-								filePath: asset.filePath,
-								codeHighlights: [
-									{
-										start: pos,
-										end: pos,
-									},
-								],
-							},
-						],
-					},
+					diagnostic,
 				});
-			} else throw e;
+			} else {
+				throw e;
+			}
 		}
 
 		asset.type = "js";
@@ -66,3 +53,28 @@ module.exports = new Transformer({
 		];
 	},
 });
+
+function parseError(filePath, message) {
+	let match = message.match(/(.*)\((\d+):(\d+)\)$/s);
+	if (match) {
+		let [, msg, line, col] = match;
+		let pos = {
+			line: Number(line),
+			column: Number(col) + 1,
+		};
+		return {
+			message: msg,
+			codeFrames: [
+				{
+					filePath: filePath,
+					codeHighlights: [
+						{
+							start: pos,
+							end: pos,
+						},
+					],
+				},
+			],
+		};
+	}
+}
