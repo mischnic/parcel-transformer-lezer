@@ -12,7 +12,7 @@ module.exports = new Transformer({
 				warn: (message) => logger.warn(message),
 			}));
 		} catch (e) {
-			let match = e.message.match(/(.*)\((\d)+:(\d)+\)$/);
+			let match = e.message.match(/(.*)\((\d)+:(\d)+\)$/s);
 			if (match) {
 				let [, msg, line, col] = match;
 				let pos = {
