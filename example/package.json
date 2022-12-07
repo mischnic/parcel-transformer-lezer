@@ -6,11 +6,11 @@
 		"build": "parcel build index.js"
 	},
 	"devDependencies": {
-		"parcel": "^2.0.0",
+		"parcel": "^2.8.0",
 		"parcel-transformer-lezer": "*"
 	},
 	"dependencies": {
-		"@lezer/common": "^0.15.7",
-		"@lezer/lr": "^0.15.4"
+		"@lezer/common": "^1.0.2",
+		"@lezer/lr": "^1.2.5"
 	}
 }

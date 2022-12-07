@@ -3,5 +3,8 @@
 	"workspaces": [
 		"example",
 		"parcel-transformer-lezer"
-	]
+	],
+	"devDependencies": {
+		"process": "^0.11.10"
+	}
 }
