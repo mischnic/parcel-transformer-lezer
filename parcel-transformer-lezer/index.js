@@ -1,6 +1,7 @@
 const { Transformer } = require("@parcel/plugin");
 const { default: ThrowableDiagnostic } = require("@parcel/diagnostic");
 
+// @ts-ignore
 const lezer = require("@lezer/generator");
 
 module.exports = new Transformer({
@@ -9,12 +10,12 @@ module.exports = new Transformer({
 		try {
 			({ parser, terms } = lezer.buildParserFile(await asset.getCode(), {
 				moduleStyle: "es",
-				warn: (message) => {
+				warn: (/** @type {string} */ message) => {
 					let diagnostic = parseError(asset.filePath, message);
 					logger.warn(diagnostic || { message });
 				},
 			}));
-		} catch (e) {
+		} catch (/** @type {any} */ e) {
 			let diagnostic = parseError(asset.filePath, e.message);
 			if (diagnostic) {
 				throw new ThrowableDiagnostic({
@@ -54,6 +55,10 @@ module.exports = new Transformer({
 	},
 });
 
+/**
+ * @param {string} filePath 
+ * @param {string} message 
+ */
 function parseError(filePath, message) {
 	let match = message.match(/(.*)\((\d+):(\d+)\)$/s);
 	if (match) {
