@@ -8,6 +8,7 @@
 		"lib": ["ES2022"],
 		"target": "ES2022",
 
+		"module": "nodenext",
 		"moduleResolution": "nodenext",
 
 		"allowJs": true,

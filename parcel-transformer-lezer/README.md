@@ -33,3 +33,11 @@ let tree = parser.parse("...");
 `parser` is an instance of [`LRParser`](https://lezer.codemirror.net/docs/ref/#lr.LRParser). Apart from this method, there is also an export for each grammar term mapping to its id.
 
 See the `example` folder for a complete example.
+
+You can put this somewhere to make Typescript happy:
+```typescript
+declare module "*.grammar" {
+  import type { LRParser } from "@lezer/lr";
+  export const parser: LRParser;
+}
+```

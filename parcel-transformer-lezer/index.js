@@ -31,14 +31,6 @@ module.exports = new Transformer({
 			export {parser} from "parser";
 			export * from "terms";
 		`);
-		asset.addDependency({
-			specifier: "parser",
-			specifierType: "esm",
-		});
-		asset.addDependency({
-			specifier: "terms",
-			specifierType: "esm",
-		});
 		return [
 			asset,
 			{
